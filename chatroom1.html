@@ -2,6 +2,7 @@
 <html>
 <head>
 <title>Socket.IO chat</title>
+<a href="index.html">Back to main page</a>
 
 <style>
 body { margin: 0; padding-bottom: 3rem; font-family: Arial; }
@@ -66,12 +67,25 @@ form.addEventListener('submit', function(e) {
   }
 });
 
-socket.on('chat message', function(msg) {
-  var item = document.createElement('li');
-  item.textContent = msg;
-  messages.appendChild(item);
-  window.scrollTo(0, document.body.scrollHeight);
+
+socket.on('chat history', (history) => {
+    const ul = document.getElementById('messages');
+    ul.innerHTML = '';
+    history.forEach(row => {
+        const li = document.createElement('li');
+        li.textContent = `${row.nickname}: ${row.message}`;
+        ul.appendChild(li);
+    });
+    ul.scrollTop = ul.scrollHeight;
 });
+
+socket.on('chat message', (msg) => {
+      const ul = document.getElementById('messages');
+      const li = document.createElement('li');
+      li.textContent = msg;
+      ul.appendChild(li);
+      ul.scrollTop = ul.scrollHeight;
+    });
 
 </script>
 
